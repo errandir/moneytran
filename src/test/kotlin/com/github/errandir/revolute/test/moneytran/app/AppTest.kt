@@ -9,7 +9,6 @@ import kotlin.test.assertEquals
 class AppTest {
 
     private val port = 7000
-    private val SUCCESSFUL_COMMIT = "1"
 
     private var app: Javalin? = null
     
