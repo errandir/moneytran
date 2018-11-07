@@ -16,6 +16,6 @@ data class Money(val amount: Long) {
     }
 
     fun contains(that: Money): Boolean {
-        return this.amount > that.amount
+        return this.amount >= that.amount
     }
 }

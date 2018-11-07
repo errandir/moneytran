@@ -56,12 +56,13 @@ class InMemoryStorage : Storage {
 
     override fun prepareTransaction(src: Id<Account>, dst: Id<Account>, money: Money): Id<Transaction>? {
         if (dst == src) return null
+        if (money.amount <= 0L) return null
         accounts[src] ?: return null
         accounts[dst] ?: return null
         if (!accounts[src]!!.read().has(money)) return null
         return transactionIds.next().also {
-            preparedTransactions[it] =
-                    Holder<Transaction?>(Transaction(it, LocalDateTime.now(), PREPARED, src, dst, money))
+            preparedTransactions[it] = Holder<Transaction?>(
+                Transaction(it, LocalDateTime.now(), PREPARED, src, dst, money))
         }
     }
 

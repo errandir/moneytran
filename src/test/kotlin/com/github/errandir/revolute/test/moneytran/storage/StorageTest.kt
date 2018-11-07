@@ -16,11 +16,12 @@ abstract class StorageTest(freshStorage: Storage) {
     private val aliceId: Id<Account>
     private val bobId: Id<Account>
 
-    private val m500 = Money(500)
-    private val m123 = Money(123)
-    private val m321 = Money(321)
+    private val m0 = Money(0)
     private val m111 = Money(111)
+    private val m123 = Money(123)
     private val m300 = Money(300)
+    private val m321 = Money(321)
+    private val m500 = Money(500)
     private val m501 = Money(501)
 
     init {
@@ -113,6 +114,10 @@ abstract class StorageTest(freshStorage: Storage) {
 
     @Test fun sameAccount() {
         assertNull(storage.prepareTransaction(aliceId, aliceId, m300))
+    }
+
+    @Test fun zeroAmount() {
+        assertNull(storage.prepareTransaction(aliceId, bobId, m0))
     }
 
     @Test open fun concurrentAccountsCreation() {
