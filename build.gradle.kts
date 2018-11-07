@@ -10,6 +10,7 @@ version = "1.0-SNAPSHOT"
 
 repositories {
     mavenCentral()
+    jcenter()
 }
 
 dependencies {
@@ -20,6 +21,7 @@ dependencies {
     compile(group = "com.fasterxml.jackson.dataformat", name = "jackson-dataformat-yaml", version = "2.5.0")
     compile(group = "com.fasterxml.jackson.module", name = "jackson-module-kotlin", version = "2.9.4.1")
     testCompile(kotlin("test-junit"))
+    testCompile(group = "khttp", name = "khttp", version = "0.1.0")
 }
 
 configure<ApplicationPluginConvention> {

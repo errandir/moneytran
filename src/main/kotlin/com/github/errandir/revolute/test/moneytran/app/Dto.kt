@@ -6,7 +6,7 @@ import com.github.errandir.revolute.test.moneytran.types.Id
 import com.github.errandir.revolute.test.moneytran.types.Money
 
 data class PrepareTransaction(val src: Long = -1, val dst: Long = -1, val amount: Long = -1) {
-    fun applyTo(storage: Storage): Id<Transaction>? {
+    fun at(storage: Storage): Id<Transaction>? {
         if (amount <= 0) return null
         return storage.prepareTransaction(Id(src), Id(dst), Money(amount))
     }
