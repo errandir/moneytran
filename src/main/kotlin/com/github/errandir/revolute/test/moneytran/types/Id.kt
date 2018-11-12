@@ -8,6 +8,10 @@ data class Id<T>(val value: Long) : Comparable<Id<T>> {
         return this.value.compareTo(other.value)
     }
 
+    override fun toString(): String {
+        return value.toString()
+    }
+
     class Supplier<T> {
         private var lastValue = AtomicLong()
         fun next(): Id<T> {

@@ -4,11 +4,16 @@ import com.github.errandir.revolute.test.moneytran.storage.InMemoryStorage
 import com.github.errandir.revolute.test.moneytran.storage.Storage
 import com.github.errandir.revolute.test.moneytran.types.Id
 import com.github.errandir.revolute.test.moneytran.types.Money
+import io.javalin.Context
 import io.javalin.Javalin
 
 const val TRANSACTION_DECLINED = "-1"
 const val SUCCESSFUL_COMMIT = "1"
 const val FAILED_COMMIT = "0"
+
+inline fun <reified T : Any> Context.peek(): T? = runCatching { validatedBody<T>() }.getOrNull()?.value
+inline fun Context.peekLongPathParam(pathParam: String): Long? = pathParam(pathParam).toLongOrNull()
+
 
 fun main(args: Array<String>) {
     app(sampleStorage()).start(7000)
@@ -17,14 +22,11 @@ fun main(args: Array<String>) {
 fun app(storage: Storage) = Javalin.create().apply {
 
     post("/transaction") { ctx ->
-        val prepareTransaction = ctx.runCatching { validatedBody<PrepareTransaction>() }.getOrNull()?.value
-        val transactionId = prepareTransaction?.at(storage)
-        ctx.result("${transactionId?.value ?: TRANSACTION_DECLINED}")
+        ctx.result(ctx.peek<PrepareTransaction>()?.runAt(storage)?.toString() ?: TRANSACTION_DECLINED)
     }
 
     post("/transaction/:id") { ctx ->
-        val success = ctx.pathParam("id").toLongOrNull()
-            ?.let { storage.commitTransaction(Id(it)) } ?: false
+        val success = ctx.peekLongPathParam("id")?.let { storage.commitTransaction(Id(it)) } ?: false
         ctx.result(if (success) SUCCESSFUL_COMMIT else FAILED_COMMIT)
     }
 

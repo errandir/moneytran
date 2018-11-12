@@ -18,6 +18,7 @@ class AppTest {
 
     @AfterTest fun stop() {
         app!!.stop()
+        app = null
     }
 
     private fun prepareTransaction(data: Any? = null, json: Any? = null) = khttp.post(
